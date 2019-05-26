@@ -18,7 +18,7 @@ gcloud app deploy # to deploy
 
 - [X] Create Google App Engine
 - [X] Run flask
-- [ ] Create navigation features
+- [x] Create navigation features
 - [ ] Create model list page
 - [ ] Create Google ML Engine instance
 - [ ] Integrate Google App Engine and Google ML Engine
