@@ -24,11 +24,13 @@ app = Flask(__name__)
 # [END create_app]
 
 
-# [START form]
 @app.route('/')
-def form():
+def index():
     return render_template('index.html')
-# [END form]
+
+@app.route('/imitation_learning//')
+def imitation_learning():
+    return render_template('imitation_learning.html')
 
 
 @app.errorhandler(500)
