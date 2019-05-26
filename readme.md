@@ -4,7 +4,7 @@ Relna is a platform to train Reinforcement Learning models and share them with o
 
 ## relna-docs
 
-Relna is deployed with Google Cloud App Engine at [https://relna-241818.appspot.com](https://relna-241818.appspot.com/form)
+Relna is deployed with Google Cloud App Engine at [https://relna-241818.appspot.com](https://relna-241818.appspot.com)
 
 Some useful GCP SDK commands
 
