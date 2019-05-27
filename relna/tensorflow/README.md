@@ -43,3 +43,12 @@ If the jobs execute correctly on cloud you should have the file `gs://relna-mlen
 ## Run a job locally programmatically
 
 An example of a full model is inside `trainers/template/`, you can read the README.md there
+
+## List jobs
+
+```
+cd trainers
+(venv) python
+>>> from utils import jobAPIwrapper as jj
+>>> jj.list()
+```

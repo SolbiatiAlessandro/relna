@@ -14,6 +14,7 @@
 
 import logging
 import relna.db
+from relna.tensorflow.trainers.utils import jobAPIwrapper as job_wrapper
 
 from flask import Flask, render_template, request
 
@@ -31,7 +32,10 @@ def index():
 @app.route('/imitation_learning/')
 def imitation_learning():
     # look for jobs
-    jobs = relna.db.get_imitation_learning_jobs()
+
+    # later jobs will be first put inside DB and then queried
+    # jobs = relna.db.get_imitation_learning_jobs()
+    jobs = job_wrapper.list()
     return render_template('imitation_learning.html', jobs=jobs)
 
 @app.errorhandler(500)

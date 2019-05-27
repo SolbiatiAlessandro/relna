@@ -25,7 +25,9 @@ flask run
 
 # you need to create a app.yaml file with inside 'runtime: python37'
 gcloud app deploy # to deploy
+gcloud beta app deploy --verbosity=info
 ```
+FIX: lib has 15k files in it, I can't deploy it. You can put in the yaml stuff like libraries: , should have a look later
 
 The app runs a Google Cloud SQL database at 104.199.68.166
 
@@ -54,6 +56,6 @@ Google ML Engine
 - [ ] Run imitation learning job from python
 
 Integration
-- [ ] Integrate Google App Engine and Google ML Engine
+- [X] Integrate Google App Engine and Google ML Engine
 - [ ] Create command line upload-job features
 - [ ] Train model from Google App

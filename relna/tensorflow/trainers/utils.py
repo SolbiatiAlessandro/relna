@@ -49,6 +49,7 @@ class jobAPIwrapper():
         proxy.gcs_write(self.trainer_package_address, "trainers/")
         print("[utils.py] APIwrapper: trainer uploaded succesfully")
 
+
     def submit(self):
         """
         to run this locally you need to 
@@ -65,12 +66,30 @@ class jobAPIwrapper():
             print("[utils.py] APIwrapper.submit: executing request..")
             response = request.execute()
             print("\n[utils.py] APIwrapper.submit: SUCCESS, job submitted")
+            print(response)
             print("[utils.py] you can monitor jobs at https://console.cloud.google.com/mlengine/jobs?project=relna-241818")
         except Exception as e:
             print("\n##### HTTP Error (from GCP ml-engine) in submitting job #####")
             
             print(e)
 
+    @staticmethod
+    def list():
+        print("[utils.py] APIwrapper: listing jobs")
+        project_name = 'relna-241818'
+        project_id = 'projects/{}'.format(project_name)
+        cloudml = discovery.build('ml', 'v1')
+        request = cloudml.projects().jobs().list(parent=project_id)
+        try:
+            print("[utils.py] APIwrapper.submit: executing request..")
+            response = request.execute()
+            print("\n[utils.py] APIwrapper.submit: SUCCESS, job listed")
+            jobs = list(response.values())[0]
+            return jobs
+        except Exception as e:
+            print("\n##### HTTP Error (from GCP ml-engine) in submitting job #####")
+            print(e)
+            return None
 
 class GCSproxy():
     """basic proxy to handle gcs APIs"""
