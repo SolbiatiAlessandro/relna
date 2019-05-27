@@ -12,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START app]
 import logging
+import relna.db
 
-# [START imports]
 from flask import Flask, render_template, request
-# [END imports]
 
 # [START create_app]
 app = Flask(__name__)
@@ -28,10 +26,11 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/imitation_learning//')
+@app.route('/imitation_learning/')
 def imitation_learning():
-    return render_template('imitation_learning.html')
-
+    # look for jobs
+    jobs = relna.db.get_imitation_learning_jobs()
+    return render_template('imitation_learning.html', jobs=jobs)
 
 @app.errorhandler(500)
 def server_error(e):
