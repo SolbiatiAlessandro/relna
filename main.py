@@ -24,7 +24,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    imitation_learning_jobs = relna.db.get_imitation_learning_jobs()
+    return render_template('index.html', 
+            len_imitation_learning_jobs=len(imitation_learning_jobs))
 
 @app.route('/imitation_learning/')
 def imitation_learning():
