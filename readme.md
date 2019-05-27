@@ -14,8 +14,7 @@ Relna is deployed with Google Cloud App Engine at [https://relna-241818.appspot.
 
 Some useful GCP SDK commands
 
-```
-gcloud init # to initialize folder in the SDK
+``` gcloud init # to initialize folder in the SDK
 
 # you can't use dev_appserver since is doesn't support python3x (WTF?)
 dev_appserver.py app.yaml 
@@ -51,7 +50,7 @@ Google App Engine
 Google ML Engine
 - [X] Create Google ML Engine instance
 - [X] Run tensorflow example from gcloud
-- [ ] Run tensorflow example from python
+- [X] Run tensorflow example from python
 - [ ] Run imitation learning job from python
 
 Integration

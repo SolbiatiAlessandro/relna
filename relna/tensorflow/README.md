@@ -2,7 +2,7 @@ This is the folder that contain the tensorflow files for training on Google Clou
 
 The pricing for Google Cloud AI Platform = Consumed ML units * $0.49
 
-Run job locally
+## Run job locally
 ```
 gcloud ai-platform local train    \
 	--module-name trainer.task    \
@@ -19,7 +19,7 @@ NOTE1: I am following cloudml-samples/census/tensorflowcore example, that didn't
 NOTE2: For debugging purpose all the env variables in these example commands are inside ./tutorial.vars
 
 
-Run a job from gcloud with python3 runtime
+## Run a job from gcloud with python3 runtime
 ```
 gcloud ai-platform jobs submit training $JOB_NAME \
     --job-dir $OUTPUT_PATH \
@@ -39,3 +39,7 @@ gcloud ai-platform jobs submit training $JOB_NAME \
 To check the current jobs open the [jobs panel in GCP](https://console.cloud.google.com/mlengine/jobs?project=relna-241818).
 
 If the jobs execute correctly on cloud you should have the file `gs://relna-mlengine/census_single_1/export/saved_model.pb`
+
+## Run a job locally programmatically
+
+An example of a full model is inside `tutorial/`, you can read the README.md there
