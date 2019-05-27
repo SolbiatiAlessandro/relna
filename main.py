@@ -25,7 +25,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    imitation_learning_jobs = relna.db.get_imitation_learning_jobs()
+    # later jobs will be first put inside DB and then queried
+    # imitation_learning_jobs = relna.db.get_imitation_learning_jobs()
+    imitation_learning_jobs = job_wrapper.list()
     return render_template('index.html', 
             len_imitation_learning_jobs=len(imitation_learning_jobs))
 
