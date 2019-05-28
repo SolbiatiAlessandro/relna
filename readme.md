@@ -8,6 +8,29 @@ Some Deep Reinforcement Learning resources that can be used along side with [rel
 - [CS294 Berkley - Deep Reinforcement Learning](http://rll.berkeley.edu/deeprlcourse/)
 - [Google Dopamine- research framework for fast prototyping of reinforcement learning algorithms](https://github.com/google/dopamine)
 
+## relna-concepts
+
+The value proposition of *relna* is to simplify the process of development and training of Deep Reinforcement Learning models, in an educational perspective. *relna* is not for research, but for learning and experiments.
+
+The fundamental use-case for  *relna* is to be able to select any of the available gyms (virtually all the major ones available), upload just the minimal code necessary to describe your Reinforcemnt Learning agent and evaluate your model. 
+
+How is this value proposition important?
+
+1. Abstracting away any complexity regarding the implementation of Deep Reinforcemnt Learning algorithms
+2. Abstracting away any complexity related to training infrastructure (relna uses Google Cloud AI Platform on the back-end to train models)
+3. Benchmarking and comparing high number of models uploaded by high number of users, all using the same environment and infrastructure.
+
+How is this value proposition implemented?
+
+This is a proposed UX flow.
+1. Landing
+2. Select RL Domain (e.g. Imitation Learning)
+3. Select Gym and other stuff (e.g. expert policy)
+4. Upload code (ideally <100 lines) and Submit Training
+5. Compare and rank result with other models
+
+Under the hood *relna* (a *Google App Engine* instance) will collect all the information and build a python package and submit it to *Google AI Platform* for training. The python package (aka **trainers**) are standard templates for differents RL domains/gyms. Once the jon is finished *relna* ranks all the models and provide tool for training examination and model comparison.
+
 ## relna-docs
 
 Relna is deployed with Google Cloud App Engine at [https://relna-241818.appspot.com](https://relna-241818.appspot.com)
