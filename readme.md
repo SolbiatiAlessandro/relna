@@ -10,9 +10,9 @@ Some Deep Reinforcement Learning resources that can be used along side with [rel
 
 ## relna-concepts
 
-The value proposition of *relna* is to simplify the process of development and training of Deep Reinforcement Learning models, in an educational perspective. *relna* is not for research, but for learning and experiments.
+The value proposition of **relna** is to simplify the process of development and training of Deep Reinforcement Learning models, in an educational perspective. **relna** is not for research, but for learning and experiments.
 
-The fundamental use-case for  *relna* is to be able to select any of the available gyms (virtually all the major ones available), upload just the minimal code necessary to describe your Reinforcemnt Learning agent and evaluate your model. 
+The fundamental use-case for  **relna** is to be able to select any of the available gyms (virtually all the major ones available), upload just the minimal code necessary to describe your Reinforcemnt Learning agent and evaluate your model. 
 
 How is this value proposition important?
 
@@ -29,7 +29,7 @@ This is a proposed UX flow.
 4. Upload code (ideally <100 lines) and Submit Training
 5. Compare and rank result with other models
 
-Under the hood *relna* (a *Google App Engine* instance) will collect all the information and build a python package and submit it to *Google AI Platform* for training. The python package (aka **trainers**) are standard templates for differents RL domains/gyms. Once the jon is finished *relna* ranks all the models and provide tool for training examination and model comparison.
+Under the hood **relna** (a *Google App Engine* instance) will collect all the information and build a python package and submit it to *Google AI Platform* for training. The python package (aka **trainers**) are standard templates for differents RL domains/gyms. Once the jon is finished **relna** ranks all the models and provide tool for training examination and model comparison.
 
 ## relna-docs
 
@@ -76,9 +76,10 @@ Google ML Engine
 - [X] Create Google ML Engine instance
 - [X] Run tensorflow example from gcloud
 - [X] Run tensorflow example from python
-- [ ] Run imitation learning job from python
+- [ ] Create trainer for imitation learning job
 
 Integration
 - [X] Integrate Google App Engine and Google ML Engine
+- [ ] Create trainer shipping interface for template trainer
 - [ ] Create command line upload-job features
-- [ ] Train model from Google App
+- [ ] Create trainer shipping interface for imitation_learning trainer
