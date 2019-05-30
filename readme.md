@@ -6,7 +6,8 @@ Similar platform out there are [Kaggle](www.kaggle.com) and [AICrowd](https://ww
 
 Some Deep Reinforcement Learning resources that can be used along side with [relna](https://relna-241818.appspot.com)
 - [CS294 Berkley - Deep Reinforcement Learning](http://rll.berkeley.edu/deeprlcourse/)
-- [Google Dopamine- research framework for fast prototyping of reinforcement learning algorithms](https://github.com/google/dopamine)
+- [Google Dopamine - research framework for fast prototyping of reinforcement learning algorithms](https://github.com/google/dopamine)
+- [DeepTraffic - Deep Reinfrocement Learning competition](https://github.com/lexfridman/deeptraffic)
 
 ## relna-concepts
 
