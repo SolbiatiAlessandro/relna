@@ -1,6 +1,5 @@
 import tensorflow as tf
 import numpy as np
-from matplotlib import pyplot as plt
 import logging
 import os
 
@@ -98,6 +97,7 @@ class Model():
 
     @staticmethod
     def visualize_train_mse(training_mse):
+        from matplotlib import pyplot as plt
         plt.figure(figsize=(15,10))
         plt.plot(training_mse)
         plt.show()

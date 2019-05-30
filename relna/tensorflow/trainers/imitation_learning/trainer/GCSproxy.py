@@ -6,7 +6,11 @@ class GCSproxy():
 
     def __init__(self, mode="prod-cloud"):
         if mode != "prod-cloud": # means I am testing GCS from local machine and not from mlengine: dev-cloud
-            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '../../../../../gcpkey.json'
+            key_path = '../../../../gcpkey.json'
+            if os.path.isfile(key_path):
+                os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = key_path
+            else:
+                os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '../'+key_path
         self.client = storage.Client()
         BUCKET_NAME = "relna-mlengine"
         self.bucket = self.client.get_bucket(BUCKET_NAME)

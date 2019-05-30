@@ -1,10 +1,14 @@
 import pickle as pkl
 import argparse
 import logging
-from model import Model as ImitationTrainerModel
+try:
+    from model import Model as ImitationTrainerModel
+    from GCSproxy import GCSproxy
+except:
+    from trainer.model import Model as ImitationTrainerModel
+    from trainer.GCSproxy import GCSproxy
 import uuid
 import os
-from GCSproxy import GCSproxy
 
 
 def load_data(expert_data_filename, mode):
@@ -38,10 +42,11 @@ def upload_model(source_model_dir, destination_model_dir, mode):
     proxy = GCSproxy(mode) 
     files = os.listdir(source_model_dir)
     for file in files:
-        proxy.gcs_write(
-            os.path.join(source_model_dir, file),
-            os.path.join(destination_model_dir, file)
-        )
+        if file != 'tmp':
+            proxy.gcs_write(
+                os.path.join(source_model_dir, file),
+                os.path.join(destination_model_dir, file)
+            )
 
 def train_and_save(args):
     """
@@ -49,6 +54,11 @@ def train_and_save(args):
 
     note: to see how to predict look inside task.ipynb
     """
+    if args.mode in ["prod-cloud"]:
+        try: os.mkdir('tmp')
+        except: pass
+        args.local_job_dir = "./tmp" # avoid parent folder non exsisting
+
     X, Y = load_data(args.input_files, args.mode)
     model = ImitationTrainerModel()
     train_mse = model.train(

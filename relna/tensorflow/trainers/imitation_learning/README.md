@@ -37,8 +37,40 @@ You should see something like this
 ```
 It means  the model is being trained and uploaded to cloud
 
+You can also launch dev-cloud job from Google Cloud SDK (locally)
+```
+cd ../
+pwd
+>> /Users/alex/Desktop/Coding/AI/relna/relna/tensorflow/trainers/imitation_learning
+
+gcloud ai-platform local train    \
+	--module-name trainer.task    \
+    --package-path trainer/     \
+    --     \
+    --mode dev-cloud \
+    --input-files data/RoboschoolHumanoid-v1.pkl \
+    --train-steps 1000    \
+```
+you should get the same output as before
 
 ## running the trainer - PROD-CLOUD
+
+PROD-CLOUD can be executed from Google Cloud SDK
+
+```
+gcloud ai-platform jobs submit training test000 \
+    --job-dir gs://relna-mlengine/outputs/imitation-learning/mlengine000 \
+    --runtime-version 1.13 \
+    --python-version 3.5 \
+    --module-name trainer.task \
+    --package-path trainer/ \
+    --region europe-west1 \
+    -- \
+    --mode prod-cloud \
+    --input-files data/RoboschoolHumanoid-v1.pkl \
+    --train-steps 2000 \
+    --verbosity DEBUG
+```
 
 (RELNA) You can programmatically run the job on cloud on cloud locally with the `utils.py` script
 

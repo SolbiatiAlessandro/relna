@@ -1,5 +1,6 @@
 README.md
 setup.py
+trainer/GCSproxy.py
 trainer/__init__.py
 trainer/model.py
 trainer/task.py
