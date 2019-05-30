@@ -44,7 +44,8 @@ Some useful GCP SDK commands
 dev_appserver.py app.yaml 
 
 # but you can run flask like
-export FLASK_APP=main.py
+(fish) set -g -x FLASK_APP main.py
+(bash) export FLASK_APP=main.py
 flask run
 
 # you need to create a app.yaml file with inside 'runtime: python37'
