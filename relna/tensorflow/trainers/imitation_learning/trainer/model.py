@@ -59,6 +59,8 @@ class Model():
         train and save model
         returns: train_mse
         """
+        if not os.path.exists(save_folder):
+            os.makedirs(save_folder)
         save_folder = os.path.join(save_folder, "model.ckpt")
         sess = self._new_tf_session()
         input_ph, output_ph, output_pred = self._create_model()
