@@ -125,5 +125,7 @@ class GCSproxy():
 
 if __name__ == "__main__":
     # this currently have permissions problems if run locally
-    jobs_wrapper = jobAPIwrapper('census_test_from_relna_local_03')
-    jobs_wrapper.submit()
+
+    ### this is for testing template, currently working
+    # jobs_wrapper = jobAPIwrapper('census_test_from_relna_local_04')
+    # jobs_wrapper.submit()

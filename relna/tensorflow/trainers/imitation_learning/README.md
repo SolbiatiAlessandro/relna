@@ -1,11 +1,6 @@
 # Imitation Learning Trainer basis
 
-## Quick-start
-Before running programmtically the job you need to build the package with
-
-```
-(venv) python setup.py sdist
-```
+## MODES
 
 You can run jobs in different modes:
 1. DEV-LOCAL: the task is executed on the local machine, using local data
@@ -82,7 +77,11 @@ gcloud ai-platform jobs submit training test000 \
 
 (RELNA) You can programmatically run the job on cloud on cloud locally with the `utils.py` script
 
+Before running programmtically the job you need to build the package with
+
 ```
+(venv) python setup.py sdist
 cd ..
+(FISH) set GOOGLE_APPLICATION_CREDENTIALS ../../../gcpkey.json
 (venv) python utils.py
 ```
