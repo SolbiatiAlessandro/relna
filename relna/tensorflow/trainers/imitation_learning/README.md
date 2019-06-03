@@ -42,6 +42,9 @@ You should see something like this
 ```
 It means  the model is being trained and uploaded to cloud
 
+NOTE: the models are uploaded to 
+`Buckets/relna-mlengine/ /outputs/imitation-learning`
+
 You can also launch dev-cloud job from Google Cloud SDK (locally)
 ```
 cd ../
