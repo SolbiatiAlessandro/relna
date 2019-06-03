@@ -6,3 +6,5 @@ gcpkey.json
 R
 .mypy_cache
 dist
+*.egg-info
+*.tar.gz
