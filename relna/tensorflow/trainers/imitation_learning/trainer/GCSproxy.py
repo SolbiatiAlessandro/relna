@@ -1,4 +1,5 @@
 import os
+import subprocess
 from google.cloud import storage
 
 class GCSproxy():
@@ -32,8 +33,20 @@ class GCSproxy():
         # this clean file name like asd/asd/asd.asd -> asd.asd
         # to be saved locally
         # otherwise rase error "no directory like asd" in the next line
-        print("[GCSproxy.gcs_load] DEBUG interacting with Google Cloud Storage to retrieve data: {}, blob={}".format(filename,blob))
-        blob.download_to_filename(clean_filename)
+        if blob is not None:
+            blob.download_to_filename(clean_filename)
+        else:
+            # for some unknown reason ML Engine can't access gcs files 
+            # using google.cloud storage, it gets blob = None
+            print("[GCSproxy.gcs_load] WARNING: blob is None (GCSproxy.py:40) trying to retrieve data from gsutil: {}".format(filename))
+            subprocess.check_call([
+                'gsutil', 
+                # '-m' ,  what is this?
+                'cp', 
+                # '-r',
+                filename, 
+                clean_filename])
+
         return clean_filename
 
     def gcs_write(self, source_file_name, destination_file_name):

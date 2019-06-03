@@ -5,7 +5,7 @@
 You can run jobs in different modes:
 1. DEV-LOCAL: the task is executed on the local machine, using local data
 2. DEV-CLOUD: the task is executed locally using data from cloud, t, you need a `gcpkey.json`, 
-3. PROD-CLOUD: the task is executed as a job on Google AI Platform (relna)
+3. PROD-CLOUD: the task is executed as a job on Google AI Platform (relna), it uses Google Cloud Storage input/output
 
 ## running the trainer - DEV-LOCAL
 

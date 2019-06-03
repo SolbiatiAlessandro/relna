@@ -134,7 +134,7 @@ if __name__ == "__main__":
 
     ### this is for testing imitiation_learning
     jobs_wrapper = jobAPIwrapper(
-           'imitation_learning_from_local_test_004',
+           'imitation_learning_from_local_test_007',
             trainer_package_address = "imitation_learning/dist/trainer-0.1.tar.gz",
             train_files = "gs://relna-mlengine/data/RoboschoolHumanoid-v1.pkl",
             eval_files = "gs://relna-mlengine/data/RoboschoolHumanoid-v1.pkl",
