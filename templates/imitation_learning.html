@@ -450,7 +450,7 @@
 		$("#test_job").click(function(){
 			$.ajax({
 			  type: 'POST',
-			  url: "{{ url_for('run_imitation_learning_job') }}",
+			  url: "{{ url_for('ship_trainer') }}",
 			  success: function(){
 						 alert("Submitted job");
 					   }
