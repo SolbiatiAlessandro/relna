@@ -32,6 +32,7 @@ class GCSproxy():
         # this clean file name like asd/asd/asd.asd -> asd.asd
         # to be saved locally
         # otherwise rase error "no directory like asd" in the next line
+        print("[GCSproxy.gcs_load] DEBUG interacting with Google Cloud Storage to retrieve data: {}, blob={}".format(filename,blob))
         blob.download_to_filename(clean_filename)
         return clean_filename
 
