@@ -19,7 +19,6 @@ class Model():
         W1 = tf.get_variable(name='W1', shape=[30, 23], initializer = tf.contrib.layers.variance_scaling_initializer())
         W2 = tf.get_variable(name='W2', shape=[23, 17], initializer = tf.contrib.layers.variance_scaling_initializer())
         
-        
         b0 = tf.get_variable(name='b0', shape=[30], initializer = tf.constant_initializer(0))
         b1 = tf.get_variable(name='b1', shape=[23], initializer = tf.constant_initializer(0))
         b2 = tf.get_variable(name='b2', shape=[17], initializer = tf.constant_initializer(0))

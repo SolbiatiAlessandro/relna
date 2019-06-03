@@ -35,7 +35,11 @@ class jobAPIwrapper():
                  '--eval-files', eval_files,
                  '--train-steps', train_steps,
                  '--eval-setps', eval_steps,
-                 '--verbosity', verbosity
+                 '--verbosity', verbosity,
+                 '--cloud-job-dir', os.path.join('outputs/imitation_learning/',
+                     job_name),
+                 '--local-job-dir', os.path.join('/tmp/imitation_learning/',
+                     job_name)
                  ],
             'region': 'europe-west1',
             'jobDir': "gs://relna-mlengine/outputs/"+str(job_name),
