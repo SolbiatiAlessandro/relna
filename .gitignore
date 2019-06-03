@@ -4,3 +4,4 @@ venv
 app.yaml
 gcpkey.json
 R
+.mypy_cache
