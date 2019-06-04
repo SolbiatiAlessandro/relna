@@ -11,6 +11,8 @@
 
   <title>relna - imitation learning</title>
 
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
   <!-- Custom fonts for this template -->
   <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -337,6 +339,12 @@
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Imitation Learning</h1>
 		  <p class="mb-4">For imitation learning you need a gym, an expert policy as a training dataset, and a model to train. This will trigger a Google Cloud ML instance that will train the model with the specified settings and report scoring. <b>To submit a new job you need to do it from the command line, <a href="https://github.com/SolbiatiAlessandro/relna">read the docs</a> for more info.</b></p>
+		  <a id="test_job" class="btn btn-warning btn-icon-split">
+			<span class="icon text-white-50">
+			  <i class="fas fa-exclamation-triangle"></i>
+			</span>
+			<span class="text">Test</span>
+		  </a>
 
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
@@ -437,6 +445,18 @@
 
   <!-- Page level custom scripts -->
   <script src="/static/js/demo/datatables-demo.js"></script>
+
+	<script>
+		$("#test_job").click(function(){
+			$.ajax({
+			  type: 'POST',
+			  url: "{{ url_for('ship_trainer') }}",
+			  success: function(){
+						 alert("Submitted job");
+					   }
+			});
+		});
+	</script>
 
 </body>
 

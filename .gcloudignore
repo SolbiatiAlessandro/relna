@@ -17,6 +17,6 @@
 __pycache__/
 # Ignored by the build system
 /setup.cfg
-fontawesome-free
 venv
 lib
+.mypy_cache

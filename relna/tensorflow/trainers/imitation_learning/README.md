@@ -1,11 +1,11 @@
 # Imitation Learning Trainer basis
 
-## setup
-Before running programmtically the job you need to build the package with
+## MODES
 
-```
-(venv) python setup.py sdist
-```
+You can run jobs in different modes:
+1. DEV-LOCAL: the task is executed on the local machine, using local data
+2. DEV-CLOUD: the task is executed locally using data from cloud, t, you need a `gcpkey.json`, 
+3. PROD-CLOUD: the task is executed as a job on Google AI Platform (relna), it uses Google Cloud Storage input/output
 
 ## running the trainer - DEV-LOCAL
 
@@ -36,6 +36,9 @@ You should see something like this
 [GCSproxy.gcs_load] interacting with Google Cloud Storage to upload data: /tmp/imitation-learning/7e130c26-9513-4b90-bbbb-53926dae540f/model.ckpt.index
 ```
 It means  the model is being trained and uploaded to cloud
+
+NOTE: the models are uploaded to 
+`Buckets/relna-mlengine/ /outputs/imitation-learning`
 
 You can also launch dev-cloud job from Google Cloud SDK (locally)
 ```
@@ -74,7 +77,11 @@ gcloud ai-platform jobs submit training test000 \
 
 (RELNA) You can programmatically run the job on cloud on cloud locally with the `utils.py` script
 
+Before running programmtically the job you need to build the package with
+
 ```
+(venv) python setup.py sdist
 cd ..
+(FISH) set GOOGLE_APPLICATION_CREDENTIALS ../../../gcpkey.json
 (venv) python utils.py
 ```

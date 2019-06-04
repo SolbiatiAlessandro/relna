@@ -29,11 +29,17 @@ class jobAPIwrapper():
             'pythonModule': 'trainer.task',
              # args are the args that will be fed to trainer.task.__main__
             'args': [
+                 '--mode','prod-cloud',
+                 '--input-files', train_files,
                  '--train-files', train_files,
                  '--eval-files', eval_files,
                  '--train-steps', train_steps,
                  '--eval-setps', eval_steps,
-                 '--verbosity', verbosity
+                 '--verbosity', verbosity,
+                 '--cloud-job-dir', os.path.join('outputs/imitation_learning/',
+                     job_name),
+                 '--local-job-dir', os.path.join('/tmp/imitation_learning/',
+                     job_name)
                  ],
             'region': 'europe-west1',
             'jobDir': "gs://relna-mlengine/outputs/"+str(job_name),
@@ -125,5 +131,16 @@ class GCSproxy():
 
 if __name__ == "__main__":
     # this currently have permissions problems if run locally
-    jobs_wrapper = jobAPIwrapper('census_test_from_relna_local_03')
+
+    ### this is for testing template, currently working
+    # jobs_wrapper = jobAPIwrapper('census_test_from_relna_local_04')
+    # jobs_wrapper.submit()
+
+    ### this is for testing imitiation_learning
+    jobs_wrapper = jobAPIwrapper(
+           'imitation_learning_from_local_test_007',
+            trainer_package_address = "imitation_learning/dist/trainer-0.1.tar.gz",
+            train_files = "gs://relna-mlengine/data/RoboschoolHumanoid-v1.pkl",
+            eval_files = "gs://relna-mlengine/data/RoboschoolHumanoid-v1.pkl",
+            )
     jobs_wrapper.submit()

@@ -96,8 +96,7 @@ if __name__=="__main__":
     parser.add_argument(
         '--input-files',
         nargs='+',
-        help='Training files local or GCS',
-        default="/Users/alex/Desktop/Coding/AI/CS294_DeepReinforcementLearning/homeworks/hw1/expert_data/RoboschoolHumanoid-v1.pkl")
+        help='Training files local or GCS', default="/Users/alex/Desktop/Coding/AI/CS294_DeepReinforcementLearning/homeworks/hw1/expert_data/RoboschoolHumanoid-v1.pkl")
     parser.add_argument(
         '--local-job-dir',
         type=str,
