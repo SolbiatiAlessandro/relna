@@ -8,3 +8,6 @@ R
 dist
 *.egg-info
 *.tar.gz
+*.zip
+unzipped_trainer
+*.DS_Store

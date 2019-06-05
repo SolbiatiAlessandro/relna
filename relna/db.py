@@ -36,19 +36,31 @@ def query_db(query='SELECT NOW() as now;'):
 def get_imitation_learning_jobs():
     return query_db("SELECT * FROM imitation_learning_jobs")
 
-def insert_imitation_learning_job(gym,expert_policy,python_model):
-    """
-    postgres=> SELECT * from imitation_learning_jobs;
-       gym    | expert_policy |     python_model     | jobid
-       ----------+---------------+----------------------+-------
-       test_gym | test_policy   | print("hello world") |     1
-       test_gym | test_policy   | print("hello world") |     2
-       (2 rows)
-    """
-    return query_db("INSERT INTO imitation_learning_jobs \
-            (gym, expert_policy, python_model) \
-            values ('{}', '{}', '{}');".format(
+def insert_imitation_learning_job(
         gym,
         expert_policy,
-        python_model)
+        python_model,
+        zipped_python_filename,
+        trainer_package_filename):
+    """
+    COLUMNS:
+     gym             | character varying(255) 
+     expert_policy   | character varying(255) 
+     python_model    | text                   
+     jobid           | integer                
+     zipped_python   | bytea                  
+     trainer_package | bytea                  
+    """
+    zipped_python = open(zipped_python_filename, 'rb').read()
+    trainer_package = open(trainer_package_filename, 'rb').read()
+    return query_db("INSERT INTO imitation_learning_jobs \
+            (gym, expert_policy, python_model, \
+            zipped_python, trainer_package) \
+            values (%s, %s, %s, %s, %s);",(
+            gym,
+            expert_policy,
+            python_model,
+            psycopg2.Binary(zipped_python),
+            psycopg2.Binary(trainer_package)
+            )
         )
