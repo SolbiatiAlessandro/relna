@@ -11,3 +11,4 @@ dist
 *.zip
 unzipped_trainer
 *.DS_Store
+db.config
