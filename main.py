@@ -28,11 +28,11 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     # later jobs will be first put inside DB and then queried
-    # imitation_learning_jobs = relna.db.get_imitation_learning_jobs()
+    imitation_learning_jobs = relna.db.get_imitation_learning_jobs()
 
     # uncomment following line for permissions if flask server is run locally
     # os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "gcpkey.json"
-    imitation_learning_jobs = job_wrapper.list()
+    # imitation_learning_jobs = job_wrapper.list()
     return render_template('index.html', 
             len_imitation_learning_jobs=len(imitation_learning_jobs))
 
@@ -41,8 +41,8 @@ def imitation_learning():
     # look for jobs
 
     # later jobs will be first put inside DB and then queried
-    # jobs = relna.db.get_imitation_learning_jobs()
-    jobs = job_wrapper.list()
+    jobs = relna.db.get_imitation_learning_jobs()
+    #jobs = job_wrapper.list()
     return render_template('imitation_learning.html', jobs=jobs)
 
 @app.route('/ship_trainer', methods=['GET', 'POST'])
@@ -75,29 +75,6 @@ def ship_trainer(
     job_id = uuid.uuid4()
     job_name = ("relna_"+trainer_folder_name+"_"+str(job_id)).replace('-','_')
     print("[relna:ship_trainer] generated job {}".format(job_name))
-
-    #build job package
-    trainer_address = os.path.join(
-            '.',
-            'relna',
-            'tensorflow',
-            'trainers',
-            trainer_folder_name)
-    pkg_destination_folder = os.path.join("pkgs",job_name)
-    # copying setup.py and trainer to current folder
-    # (package will not be built correctly otherwise
-    os.system("cp {} .".format(os.path.join(trainer_address, 'setup.py')))
-    os.system("cp -r {} .".format(os.path.join(trainer_address, 'trainer')))
-    # following commands builds the package
-    os.system("python setup.py\
-            sdist -d {}".format(pkg_destination_folder))
-    logging.warning("[relna:ship_trainer] generated pakage {}".format(
-        pkg_destination_folder))
-
-    #clean local folder
-    os.system("rm ./setup.py")
-    os.system("rm -r ./trainer")
-    os.system("rm -r ./trainer.egg-info")
 
     #submit job
     wrapper = job_wrapper(

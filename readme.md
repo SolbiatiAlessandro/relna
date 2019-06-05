@@ -79,10 +79,16 @@ Google ML Engine
 - [X] Create Google ML Engine instance
 - [X] Run tensorflow example from gcloud
 - [X] Run tensorflow example from python
-- [ ] Create trainer for imitation learning job
+- [X] Create trainer for imitation learning job
 
 Integration
 - [X] Integrate Google App Engine and Google ML Engine
-- [ ] Create trainer shipping interface for template trainer
-- [ ] Create command line upload-job features
-- [ ] Create trainer shipping interface for imitation_learning trainer
+- [X] Create trainer shipping interface for template trainer
+- [X] Create command line upload-job features
+- [X] Create trainer shipping interface for imitation_learning trainer
+
+Client
+- [X] Build utils to make client upload job to relna DB
+- [ ] trainer package need to be uploaded to GCS,modify utils. Now upload of trainer package is done by the client and not by utils
+- [ ] build interface to upload/download trainers code from server to client- [ ] build integration to ship trainers from DB
+

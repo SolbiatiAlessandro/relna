@@ -5,7 +5,7 @@ db_password = os.environ.get('CLOUD_SQL_PASSWORD')
 db_name = os.environ.get('CLOUD_SQL_DATABASE_NAME')
 db_connection_name = os.environ.get('CLOUD_SQL_CONNECTION_NAME')
 
-def query_db(query='SELECT NOW() as now;'):
+def query_db(query='SELECT NOW() as now;', args=None):
     """
     query psycopg2 db on relna project
 
@@ -23,7 +23,7 @@ def query_db(query='SELECT NOW() as now;'):
 
 
     with cnx.cursor() as cursor:
-        cursor.execute(query)
+        cursor.execute(query,args)
         try: result = cursor.fetchall()
         except psycopg2.ProgrammingError:
             pass #no results to fetch
@@ -56,7 +56,7 @@ def insert_imitation_learning_job(
     return query_db("INSERT INTO imitation_learning_jobs \
             (gym, expert_policy, python_model, \
             zipped_python, trainer_package) \
-            values (%s, %s, %s, %s, %s);",(
+            values (%s, %s, %s, %s, %s);", (
             gym,
             expert_policy,
             python_model,
