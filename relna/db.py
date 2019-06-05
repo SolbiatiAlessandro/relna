@@ -36,6 +36,15 @@ def query_db(query='SELECT NOW() as now;', args=None):
 def get_imitation_learning_jobs():
     return query_db("SELECT * FROM imitation_learning_jobs")
 
+def get_imitation_learning_job_pkg(job_id):
+    """
+    args:
+        job_id: (int) e.g. 5
+    return pkg as a str (not on filesys since can't IO on filesys in prod)
+    """
+    return query_db("select trainer_package from imitation_learning_jobs where jobid = 5;")
+    
+
 def insert_imitation_learning_job(
         gym,
         expert_policy,
