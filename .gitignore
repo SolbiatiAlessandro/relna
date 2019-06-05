@@ -12,3 +12,4 @@ dist
 unzipped_trainer
 *.DS_Store
 db.config
+*.swp
