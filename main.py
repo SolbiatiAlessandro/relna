@@ -143,6 +143,17 @@ def ship_trainer(
 
     return '[relna:ship_trainer] trainer shipped succesfully'
 
+@app.route('/fork', methods=['POST'])
+def fork():
+    """
+    POST
+    args: trainerID (int)
+    """
+    print(request.values)
+    zipped_code = relna.db.get_imitation_learning_job_code(
+            request.values['trainerID'])
+    zipped_code_bytes = bytes(zipped_code)
+    return zipped_code_bytes
 
 @app.errorhandler(500)
 def server_error(e):

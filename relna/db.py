@@ -45,9 +45,22 @@ def get_imitation_learning_job_pkg(job_id):
         <class 'memoryview'> : bytes obj
     return pkg as a str (not on filesys since can't IO on filesys in prod)
     """
-    query_result = query_db("select trainer_package from imitation_learning_jobs where jobid = 5;")
+    query_result = query_db("select trainer_package from imitation_learning_jobs where jobid = %s;", str(job_id))
     return query_result[0][0]
-    
+
+def get_imitation_learning_job_code(job_id):
+    """
+    args:
+        job_id: (int) e.g. 5
+
+    returns:
+        <class 'memoryview'> : bytes obj
+    return zip code as a str (not on filesys since can't IO on filesys in prod)
+    """
+    query_result = query_db("select zipped_python from imitation_learning_jobs where jobid = %s;", str(job_id))
+    return query_result[0][0]
+
+
 def insert_imitation_learning_job(
         gym,
         expert_policy,
