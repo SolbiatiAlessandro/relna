@@ -155,6 +155,29 @@ def fork():
     zipped_code_bytes = bytes(zipped_code)
     return zipped_code_bytes
 
+@app.route('/ship', methods=['POST'])
+def ship():
+    """
+    POST
+    """
+    logging.warning("relna:main:ship - recieved ship request")
+    print(request.values)
+    zipped_code_binary = bytes(request.values['zipped_code_binary'], 'utf8')
+    trainer_pkg_binary = bytes(request.values['trainer_pkg_binary'], 'utf8')
+    python_model = request.values['python_model']
+    gym = request.values['gym']
+    expert_policy = request.values['expert_policy']
+
+    query_result = relna.db.insert_imitation_learning_job_bytes(
+            gym,
+            expert_policy,
+            python_model,
+            zipped_code_binary,
+            trainer_pkg_binary
+            )
+    logging.warning("relna:main:ship - ship request executed")
+    return "ship request executed"
+
 @app.errorhandler(500)
 def server_error(e):
     # Log the error and stacktrace.

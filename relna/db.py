@@ -1,5 +1,6 @@
 import psycopg2
 import os
+import logging
 db_user = os.environ.get('CLOUD_SQL_USERNAME')
 db_password = os.environ.get('CLOUD_SQL_PASSWORD')
 db_name = os.environ.get('CLOUD_SQL_DATABASE_NAME')
@@ -60,7 +61,6 @@ def get_imitation_learning_job_code(job_id):
     query_result = query_db("select zipped_python from imitation_learning_jobs where jobid = %s;", str(job_id))
     return query_result[0][0]
 
-
 def insert_imitation_learning_job(
         gym,
         expert_policy,
@@ -76,8 +76,39 @@ def insert_imitation_learning_job(
      zipped_python   | bytea                  
      trainer_package | bytea                  
     """
+    logging.warning("relna:relna:db - inserting new jobs from file")
     zipped_python = open(zipped_python_filename, 'rb').read()
     trainer_package = open(trainer_package_filename, 'rb').read()
+    return query_db("INSERT INTO imitation_learning_jobs \
+            (gym, expert_policy, python_model, \
+            zipped_python, trainer_package) \
+            values (%s, %s, %s, %s, %s);", (
+            gym,
+            expert_policy,
+            python_model,
+            psycopg2.Binary(zipped_python),
+            psycopg2.Binary(trainer_package)
+            )
+        )
+
+def insert_imitation_learning_job_bytes(
+        gym,
+        expert_policy,
+        python_model,
+        zipped_python_binary,
+        trainer_package_binary):
+    """
+    COLUMNS:
+     gym             | character varying(255) 
+     expert_policy   | character varying(255) 
+     python_model    | text                   
+     jobid           | integer                
+     zipped_python   | bytea                  
+     trainer_package | bytea                  
+    """
+    logging.warning("relna:relna:db - inserting new jobs from binaries")
+    zipped_python = zipped_python_binary
+    trainer_package = trainer_package_binary
     return query_db("INSERT INTO imitation_learning_jobs \
             (gym, expert_policy, python_model, \
             zipped_python, trainer_package) \
