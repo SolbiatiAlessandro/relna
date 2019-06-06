@@ -64,7 +64,9 @@ def imitation_learning():
     for job in relna_jobs:
         trainerID = job[3]
         relna_job_id = "relna_imitation_learning__"+str(trainerID)+"__"
-        job_status = relna_jobs_state[relna_job_id]['state']
+        job_status = relna_jobs_state[relna_job_id]['state'] \
+                if relna_jobs_state.get(relna_job_id) is not None \
+                else 'NO JOB FOUND'
         job_dict = {
                 'trainerID':trainerID,
                 'gym':job[0],
@@ -82,8 +84,8 @@ def imitation_learning():
 
     return render_template('imitation_learning.html', jobs=data)
 
-@app.route('/ship_trainer', methods=['GET', 'POST'])
-def ship_trainer(
+@app.route('/gcloud_ship', methods=['GET', 'POST'])
+def gcloud_ship(
         trainer_folder_name='imitation_learning',
         data_file_name='RoboschoolHumanoid-v1.pkl',
         job_id=5
@@ -108,7 +110,8 @@ def ship_trainer(
     2. upload trainer package as bytes to GCS
     3. submit job to Google Cloud with address to trainer package
     """
-    print(request)
+    logging.warning("relna:main:gclouid_ship - recieved ship request")
+    print(request.values.keys())
     shipping_id = str(job_id)+"__"+str(uuid.uuid4())
     job_name = ("relna_"+trainer_folder_name+"__"+str(shipping_id)).replace('-','_')
     print("[relna:ship_trainer] generated job {}".format(job_name))
@@ -122,9 +125,11 @@ def ship_trainer(
                 "trainer-0.1.tar.gz")
 
     #this is a <memoryview> object
+    logging.warning("relna:main:gclouid_ship downloading trainer_pkg from db")
     trainer_pkg = relna.db.get_imitation_learning_job_pkg(job_id)
     trainer_pkg_bytes = bytes(trainer_pkg)
     proxy = GCSproxy()
+    logging.warning("relna:main:gclouid_ship uploading trainer_pkg to GCS")
     proxy.gcs_write_bytes(trainer_pkg_bytes, 
             os.path.join("trainers", trainer_package_address))
 
@@ -137,11 +142,12 @@ def ship_trainer(
             train_files = "gs://relna-mlengine/data/"+data_file_name,
             eval_files = "gs://relna-mlengine/data/"+data_file_name
             )
+    logging.warning("relna:main:gclouid_ship submitting job to GCloud AI Platform")
     wrapper.submit()
     logging.warning("[relna:ship_trainer] submitted job {}".format(
         job_name))
 
-    return '[relna:ship_trainer] trainer shipped succesfully'
+    return 'relna gcloud-ship SUCCESS'
 
 @app.route('/fork', methods=['POST'])
 def fork():
@@ -149,7 +155,7 @@ def fork():
     POST
     args: trainerID (int)
     """
-    print(request.values)
+    print(request.values.keys().keys())
     zipped_code = relna.db.get_imitation_learning_job_code(
             request.values['trainerID'])
     zipped_code_bytes = bytes(zipped_code)
@@ -159,9 +165,13 @@ def fork():
 def ship():
     """
     POST
+
+    this ship method 
+    1. recieve binaries and upload to database
+    2. call gcloud_ship to send job to gcloud AI Platform
     """
     logging.warning("relna:main:ship - recieved ship request")
-    print(request.values)
+    print(request.values.keys())
     zipped_code_binary = bytes(request.values['zipped_code_binary'], 'utf8')
     trainer_pkg_binary = bytes(request.values['trainer_pkg_binary'], 'utf8')
     python_model = request.values['python_model']
@@ -176,7 +186,12 @@ def ship():
             trainer_pkg_binary
             )
     logging.warning("relna:main:ship - ship request executed")
-    return "ship request executed"
+    trainerID = query_result
+    logging.warning("relna:main:ship - inserted new trainer trainerID={}".format(trainerID))
+
+    logging.warning("relna:main:ship - ship to gcloud")
+    gcloud_res = gcloud_ship(job_id = trainerID)
+    return "relna:ship SUCCESS |"+gcloud_res
 
 @app.errorhandler(500)
 def server_error(e):

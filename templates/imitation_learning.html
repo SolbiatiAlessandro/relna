@@ -451,7 +451,7 @@
 		$("#test_job").click(function(){
 			$.ajax({
 			  type: 'POST',
-			  url: "{{ url_for('ship_trainer') }}",
+			  url: "{{ url_for('gcloud_ship') }}",
 			  success: function(){
 						 alert("Submitted job");
 					   }

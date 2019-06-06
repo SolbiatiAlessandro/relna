@@ -24,7 +24,14 @@ def query_db(query='SELECT NOW() as now;', args=None):
 
 
     with cnx.cursor() as cursor:
-        cursor.execute(query,args)
+        if args is not None and \
+                (len(args) == 1 or (type(args) is not tuple and type(args) is not list)):
+            # this is to avoid Psycopg2 - not all arguments converted during string formatting
+            # https://stackoverflow.com/questions/
+            # 47956425/psycopg2-not-all-arguments-converted-during-string-formatting
+            cursor.execute(query,(args,))
+        else:
+            cursor.execute(query,args)
         try: result = cursor.fetchall()
         except psycopg2.ProgrammingError:
             pass #no results to fetch
@@ -109,10 +116,10 @@ def insert_imitation_learning_job_bytes(
     logging.warning("relna:relna:db - inserting new jobs from binaries")
     zipped_python = zipped_python_binary
     trainer_package = trainer_package_binary
-    return query_db("INSERT INTO imitation_learning_jobs \
+    query_result = query_db("INSERT INTO imitation_learning_jobs \
             (gym, expert_policy, python_model, \
             zipped_python, trainer_package) \
-            values (%s, %s, %s, %s, %s);", (
+            values (%s, %s, %s, %s, %s) RETURNING jobid;", (
             gym,
             expert_policy,
             python_model,
@@ -120,3 +127,4 @@ def insert_imitation_learning_job_bytes(
             psycopg2.Binary(trainer_package)
             )
         )
+    return query_result[0][0]

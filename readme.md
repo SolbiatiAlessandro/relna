@@ -52,6 +52,8 @@ flask run
 # you need to create a app.yaml file with inside 'runtime: python37'
 gcloud app deploy # to deploy
 gcloud beta app deploy --verbosity=info
+
+gcloud app logs tail
 ```
 FIX: lib has 15k files in it, I can't deploy it. You can put in the yaml stuff like libraries: , should have a look later
 
