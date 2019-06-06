@@ -6,8 +6,7 @@
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
+# Unless required by applicable law or agreed to in writing, software # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -172,8 +171,8 @@ def ship():
     """
     logging.warning("relna:main:ship - recieved ship request")
     print(request.values.keys())
-    zipped_code_binary = bytes(request.values['zipped_code_binary'], 'utf8')
-    trainer_pkg_binary = bytes(request.values['trainer_pkg_binary'], 'utf8')
+    zipped_code_binary = request.values['zipped_code_binary']
+    trainer_pkg_binary = request.values['trainer_pkg_binary']
     python_model = request.values['python_model']
     gym = request.values['gym']
     expert_policy = request.values['expert_policy']
