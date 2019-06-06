@@ -89,6 +89,6 @@ Integration
 
 Client
 - [X] Build utils to make client upload job to relna DB
-- [ ] trainer package need to be uploaded to GCS,modify utils. Read form postgrsql as str, blob.upload_from_string to GCS, check that job is succesfully working
+- [X] trainer package need to be uploaded to GCS,modify utils. Read form postgrsql as str, blob.upload_from_string to GCS, check that job is succesfully working
 - [ ] build interface to upload/download trainers code from server to client- [ ] build integration to ship trainers from DB
 

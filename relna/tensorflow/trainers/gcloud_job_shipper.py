@@ -2,6 +2,7 @@
 from googleapiclient import discovery
 from google.cloud import storage
 import os
+import logging
 
 class jobAPIwrapper():
     """
@@ -51,9 +52,12 @@ class jobAPIwrapper():
         """
         trainer folder need to be on GCS
         """
-        proxy = GCSproxy()
-        proxy.gcs_write(self.trainer_package_address, "trainers/")
-        print("[utils.py] APIwrapper: trainer uploaded succesfully")
+        raise NotImplementedError
+        # uploading is now done reading from the database
+
+        # proxy = GCSproxy()
+        # proxy.gcs_write(self.trainer_package_address, "trainers/")
+        # logging.warning("[utils.py] APIwrapper: trainer uploaded succesfully")
 
 
     def submit(self):
@@ -61,40 +65,39 @@ class jobAPIwrapper():
         to run this locally you need to 
         export GOOGLE_APPLICATION_CREDENTIALS="/Users/alex/Desktop/Coding/AI/relna/gcpkey.json"
         """
-        print("[utils.py] APIwrapper: submitting job ({})".format(self.job_name))
+        logging.warning("[utils.py] APIwrapper: submitting job ({})".format(self.job_name))
         project_name = 'relna-241818'
         project_id = 'projects/{}'.format(project_name)
-        cloudml = discovery.build('ml', 'v1')
+        cloudml = discovery.build('ml', 'v1', cache_discovery=False)
         request = cloudml.projects().jobs().create(body=self.job_spec,
                               parent=project_id)
-        self.upload_trainer()
         try:
-            print("[utils.py] APIwrapper.submit: executing request..")
+            logging.warning("[utils.py] APIwrapper.submit: executing request..")
             response = request.execute()
-            print("\n[utils.py] APIwrapper.submit: SUCCESS, job submitted")
-            print(response)
-            print("[utils.py] you can monitor jobs at https://console.cloud.google.com/mlengine/jobs?project=relna-241818")
+            logging.warning("\n[utils.py] APIwrapper.submit: SUCCESS, job submitted")
+            logging.warning(response)
+            logging.warning("[utils.py] you can monitor jobs at https://console.cloud.google.com/mlengine/jobs?project=relna-241818")
         except Exception as e:
-            print("\n##### HTTP Error (from GCP ml-engine) in submitting job #####")
+            logging.warning("\n##### HTTP Error (from GCP ml-engine) in submitting job #####")
             
-            print(e)
+            logging.warning(e)
 
     @staticmethod
     def list():
-        print("[utils.py] APIwrapper: listing jobs")
+        logging.warning("[utils.py] APIwrapper: listing jobs")
         project_name = 'relna-241818'
         project_id = 'projects/{}'.format(project_name)
-        cloudml = discovery.build('ml', 'v1')
+        cloudml = discovery.build('ml', 'v1', cache_discovery=False)
         request = cloudml.projects().jobs().list(parent=project_id)
         try:
-            print("[utils.py] APIwrapper.submit: executing request..")
+            logging.warning("[utils.py] APIwrapper.submit: executing request..")
             response = request.execute()
-            print("\n[utils.py] APIwrapper.submit: SUCCESS, job listed")
+            logging.warning("\n[utils.py] APIwrapper.submit: SUCCESS, job listed")
             jobs = list(response.values())[0]
             return jobs
         except Exception as e:
-            print("\n##### HTTP Error (from GCP ml-engine) in submitting job #####")
-            print(e)
+            logging.warning("\n##### HTTP Error (from GCP ml-engine) in listing job #####")
+            logging.warning(e)
             return None
 
 class GCSproxy():
@@ -115,7 +118,7 @@ class GCSproxy():
         args:
             filename [cards.pkl, logs.csv]
         """
-        print("[GCSproxy.gcs_load] interacting with Google Cloud Storage to retrieve data: {}".format(filename))
+        logging.warning("[GCSproxy.gcs_load] interacting with Google Cloud Storage to retrieve data: {}".format(filename))
         blob = self.bucket.get_blob(filename)
         blob.download_to_filename(filename)
 
@@ -125,9 +128,21 @@ class GCSproxy():
         args:
             filename [cards.pkl, logs.csv]
         """
-        print("[GCSproxy.gcs_load] interacting with Google Cloud Storage to upload data: {}".format(filename))
+        logging.warning("[GCSproxy.gcs_load] interacting with Google Cloud Storage to upload data: {}".format(filename))
         blob = self.bucket.blob(prefix+filename)
         blob.upload_from_filename(filename)
+
+    def gcs_write_bytes(self, bytes_data, destination_file):
+        """
+        write cards to gcs
+        args:
+            bytes_data : <memoryview>
+            destiation_file : str
+        """
+        logging.warning("[GCSproxy.gcs_load] interacting with Google Cloud Storage to upload binary data")
+        blob = self.bucket.blob(destination_file)
+        blob.upload_from_string(bytes_data)
+
 
 if __name__ == "__main__":
     # this currently have permissions problems if run locally

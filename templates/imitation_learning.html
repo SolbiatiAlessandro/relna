@@ -356,7 +356,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-					  <th>Time</th>
+					  <th>trainer ID</th>
                       <th>Gym</th>
                       <th>Expert Policy</th>
                       <th>Model</th>
@@ -367,12 +367,13 @@
                   </thead>
                   <tbody>
 				  {% for job in jobs %}
+				  <!-- ('RoboschoolHumanoid', 'v1', 'hw1', 5, <memory at 0x108ebe4c8>, <memory at 0x109174288>) -->
                     <tr>
-						<td>{{job['createTime']}}
-						<td>NA</td>
-						<td>NA</td>
-						<td>{{job['jobId']}}</td>
-						<td>{{job['state']}}</td>
+						<td>{{job['trainerID']}}</td>
+						<td>{{job['gym']}}</td>
+						<td>{{job['expert_policy']}}</td>
+						<td>{{job['model']}}</td>
+						<td>{{job['status']}}</td>
                         <td>NA</td>
                         <td>NA</td>
                     </tr>

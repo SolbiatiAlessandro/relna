@@ -40,11 +40,14 @@ def get_imitation_learning_job_pkg(job_id):
     """
     args:
         job_id: (int) e.g. 5
+
+    returns:
+        <class 'memoryview'> : bytes obj
     return pkg as a str (not on filesys since can't IO on filesys in prod)
     """
-    return query_db("select trainer_package from imitation_learning_jobs where jobid = 5;")
+    query_result = query_db("select trainer_package from imitation_learning_jobs where jobid = 5;")
+    return query_result[0][0]
     
-
 def insert_imitation_learning_job(
         gym,
         expert_policy,

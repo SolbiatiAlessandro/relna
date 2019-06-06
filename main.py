@@ -16,7 +16,8 @@ import logging
 import os
 import relna.db
 import uuid
-from relna.tensorflow.trainers.utils import jobAPIwrapper as job_wrapper
+from relna.tensorflow.trainers.gcloud_job_shipper import jobAPIwrapper as job_wrapper
+from relna.tensorflow.trainers.gcloud_job_shipper import GCSproxy
 
 from flask import Flask, render_template, request
 
@@ -38,17 +39,54 @@ def index():
 
 @app.route('/imitation_learning/')
 def imitation_learning():
-    # look for jobs
+    """
+    look for jobs from postgresql
+    """
 
-    # later jobs will be first put inside DB and then queried
-    jobs = relna.db.get_imitation_learning_jobs()
-    #jobs = job_wrapper.list()
-    return render_template('imitation_learning.html', jobs=jobs)
+    relna_jobs = relna.db.get_imitation_learning_jobs()
+    # ('RoboschoolHumanoid', 'v1', 'hw1', 5, <memory at 0x108ebe4c8>, <memory at 0x109174288>)
+
+    # query Google Cloud AI Platform job lists
+    gcloud_jobs = job_wrapper.list()
+    relna_jobs_state = {}
+    # always record the state of the last gcloud job
+    # gcloud doesn't guarantee they are time ordered tough
+    for job in gcloud_jobs[::-1]:
+        # this is the relna_job id without the gcloud uuid 
+        relna_job_id = job['jobId'][:-36] 
+        relna_jobs_state[relna_job_id] = {
+                'state' : job['state'],
+                'gcloud_id' : job['jobId']
+                }
+
+    data = []
+    logging.warning("[DEBUGGING:jobs] trainerID, job_status, gcloud_job_id")
+    for job in relna_jobs:
+        trainerID = job[3]
+        relna_job_id = "relna_imitation_learning__"+str(trainerID)+"__"
+        job_status = relna_jobs_state[relna_job_id]['state']
+        job_dict = {
+                'trainerID':trainerID,
+                'gym':job[0],
+                'expert_policy':job[1],
+                'model':job[2][:30],
+                'status':job_status
+            }
+        logging.warning("[DEBBUGING:jobs] {} {} {}".format(
+            trainerID,
+            job_status,
+            relna_jobs_state[relna_job_id]['gcloud_id']
+            )
+        )
+        data.append(job_dict)
+
+    return render_template('imitation_learning.html', jobs=data)
 
 @app.route('/ship_trainer', methods=['GET', 'POST'])
 def ship_trainer(
         trainer_folder_name='imitation_learning',
-        data_file_name='RoboschoolHumanoid-v1.pkl'
+        data_file_name='RoboschoolHumanoid-v1.pkl',
+        job_id=5
         ):
     """
     Args:
@@ -66,21 +104,36 @@ def ship_trainer(
         - task.py
 
     ships trainer to Google AI Platform:
-    1. build trainer package
-    2. submit job to Google Cloud
+    1. download trainer package from postgresql
+    2. upload trainer package as bytes to GCS
+    3. submit job to Google Cloud with address to trainer package
     """
     print(request)
-
-    #generete job uuid
-    job_id = uuid.uuid4()
-    job_name = ("relna_"+trainer_folder_name+"_"+str(job_id)).replace('-','_')
+    shipping_id = str(job_id)+"__"+str(uuid.uuid4())
+    job_name = ("relna_"+trainer_folder_name+"__"+str(shipping_id)).replace('-','_')
     print("[relna:ship_trainer] generated job {}".format(job_name))
 
-    #submit job
+    #####
+    # get trainer from postgre
+    # upload trainer to GCS
+    #####
+    pkg_destination_folder = os.path.join("pkgs",job_name)
+    trainer_package_address = os.path.join(pkg_destination_folder,
+                "trainer-0.1.tar.gz")
+
+    #this is a <memoryview> object
+    trainer_pkg = relna.db.get_imitation_learning_job_pkg(job_id)
+    trainer_pkg_bytes = bytes(trainer_pkg)
+    proxy = GCSproxy()
+    proxy.gcs_write_bytes(trainer_pkg_bytes, 
+            os.path.join("trainers", trainer_package_address))
+
+    #####
+    # submit job to GC ML
+    #####
     wrapper = job_wrapper(
             job_name,
-            trainer_package_address = os.path.join(pkg_destination_folder,
-                "trainer-0.1.tar.gz"),
+            trainer_package_address = trainer_package_address,
             train_files = "gs://relna-mlengine/data/"+data_file_name,
             eval_files = "gs://relna-mlengine/data/"+data_file_name
             )
