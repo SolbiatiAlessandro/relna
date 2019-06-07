@@ -171,12 +171,11 @@ def ship():
     """
     logging.warning("relna:main:ship - recieved ship request")
     print(request.values.keys())
-    zipped_code_binary = request.values['zipped_code_binary']
-    trainer_pkg_binary = request.values['trainer_pkg_binary']
+    zipped_code_binary = request.files['code'].read()
+    trainer_pkg_binary = request.files['trainer'].read()
     python_model = request.values['python_model']
     gym = request.values['gym']
     expert_policy = request.values['expert_policy']
-
     query_result = relna.db.insert_imitation_learning_job_bytes(
             gym,
             expert_policy,
@@ -191,6 +190,19 @@ def ship():
     logging.warning("relna:main:ship - ship to gcloud")
     gcloud_res = gcloud_ship(job_id = trainerID)
     return "relna:ship SUCCESS |"+gcloud_res
+
+@app.route('/check_post_corruption', methods=['POST'])
+def check_post_corruption():
+    logging.warning("relna:main:ship - recieved ship request")
+    print(request.values.keys())
+    zipped_code_binary = request.values['zipped_code_binary']
+    trainer_pkg_binary = request.values['trainer_pkg_binary']
+    python_model = request.values['python_model']
+    gym = request.values['gym']
+    expert_policy = request.values['expert_policy']
+
+    f = request.files['trainer']
+    f.save('pkgs/trainer.tar.gz')
 
 @app.errorhandler(500)
 def server_error(e):
