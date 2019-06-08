@@ -154,7 +154,7 @@ def fork():
     POST
     args: trainerID (int)
     """
-    print(request.values.keys().keys())
+    print([*request.values.keys()])
     zipped_code = relna.db.get_imitation_learning_job_code(
             request.values['trainerID'])
     zipped_code_bytes = bytes(zipped_code)
