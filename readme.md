@@ -8,6 +8,7 @@ Some Deep Reinforcement Learning resources that can be used along side with [rel
 - [CS294 Berkley - Deep Reinforcement Learning](http://rll.berkeley.edu/deeprlcourse/)
 - [Google Dopamine - research framework for fast prototyping of reinforcement learning algorithms](https://github.com/google/dopamine)
 - [DeepTraffic - Deep Reinfrocement Learning competition](https://github.com/lexfridman/deeptraffic)
+- [Google Research Football: A Novel Reinforcement Learning Environment](https://ai.googleblog.com/2019/06/introducing-google-research-football.html)
 
 ## relna-concepts
 
