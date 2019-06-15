@@ -75,12 +75,6 @@ def imitation_learning():
                 'output_1':job[6],
                 'output_2':job[7]
             }
-        logging.warning("[DEBBUGING:jobs] {} {} {}".format(
-            trainerID,
-            job_status,
-            relna_jobs_state[relna_job_id]['gcloud_id']
-            )
-        )
         data.append(job_dict)
 
     return render_template('imitation_learning.html', jobs=data)
@@ -89,7 +83,8 @@ def imitation_learning():
 def gcloud_ship(
         trainer_folder_name='imitation_learning',
         data_file_name='RoboschoolHumanoid-v1.pkl',
-        job_id=5
+        job_id=5,
+        train_steps=1000
         ):
     """
     Args:
@@ -141,7 +136,8 @@ def gcloud_ship(
             job_name,
             trainer_package_address = trainer_package_address,
             train_files = "gs://relna-mlengine/data/"+data_file_name,
-            eval_files = "gs://relna-mlengine/data/"+data_file_name
+            eval_files = "gs://relna-mlengine/data/"+data_file_name,
+            train_steps=train_steps
             )
     logging.warning("relna:main:gclouid_ship submitting job to GCloud AI Platform")
     wrapper.submit()
@@ -178,6 +174,7 @@ def ship():
     python_model = request.values['python_model']
     gym = request.values['gym']
     expert_policy = request.values['expert_policy']
+    train_steps = request.values['train_steps']
     query_result = relna.db.insert_imitation_learning_job_bytes(
             gym,
             expert_policy,
@@ -190,13 +187,14 @@ def ship():
     logging.warning("relna:main:ship - inserted new trainer trainerID={}".format(trainerID))
 
     logging.warning("relna:main:ship - ship to gcloud")
-    logging.warning("relna:main:ship - job_id = {}".format(job_id))
+    logging.warning("relna:main:ship - job_id = {}".format(trainerID))
     logging.warning("relna:main:ship - \
             data will be read from gs://relna-mlengine/data/{}"\
             .format(expert_policy))
     gcloud_res = gcloud_ship(
             job_id = trainerID,
-            data_file_name=expert_policy
+            data_file_name=expert_policy,
+            train_steps=train_steps
             )
     return "relna:ship SUCCESS |"+gcloud_res
 
