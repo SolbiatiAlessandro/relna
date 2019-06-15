@@ -128,3 +128,20 @@ def insert_imitation_learning_job_bytes(
             )
         )
     return query_result[0][0]
+
+def update_imitation_learning_job_output(
+        jobid,
+        output_1,
+        output_2
+        ):
+    """
+    """
+    logging.warning("relna:relna:db - updating job output values")
+    return query_db("UPDATE imitation_learning_jobs SET \
+            output_1 = %s, \
+            output_2 = %s  \
+            WHERE jobid = %s;", (
+                output_1,
+                output_2,
+                jobid
+                ))

@@ -1,4 +1,4 @@
-# Copyright 2016 Google Inc.
+# Copyright RELNA - Reinforcement Learning Arena
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -71,7 +71,9 @@ def imitation_learning():
                 'gym':job[0],
                 'expert_policy':job[1],
                 'model':job[2][:30],
-                'status':job_status
+                'status':job_status,
+                'output_1':job[6],
+                'output_2':job[7]
             }
         logging.warning("[DEBBUGING:jobs] {} {} {}".format(
             trainerID,
@@ -191,18 +193,27 @@ def ship():
     gcloud_res = gcloud_ship(job_id = trainerID)
     return "relna:ship SUCCESS |"+gcloud_res
 
-@app.route('/check_post_corruption', methods=['POST'])
-def check_post_corruption():
-    logging.warning("relna:main:ship - recieved ship request")
-    print(request.values.keys())
-    zipped_code_binary = request.values['zipped_code_binary']
-    trainer_pkg_binary = request.values['trainer_pkg_binary']
-    python_model = request.values['python_model']
-    gym = request.values['gym']
-    expert_policy = request.values['expert_policy']
-
-    f = request.files['trainer']
-    f.save('pkgs/trainer.tar.gz')
+@app.route('/submit_job_results', methods=['POST'])
+def submit_job_results():
+    """
+    triggered by gcloud at completition of job
+    """
+    logging.warning(
+            "relna:main:submit_job_results - recieved submission request")
+    print(request.values)
+    table_name = request.values['table_name']
+    jobid = request.values['jobid']
+    output_1 = request.values['output_1']
+    output_2 = request.values['output_2']
+    if table_name == "imitation_learning_jobs": 
+        relna.db.update_imitation_learning_job_output(
+                jobid,
+                output_1,
+                output_2)
+    logging.warning(
+            "relna:main:submit_job_results - submission completed")
+    return "RELNA:submit_job_result: submission succesfull"
+    
 
 @app.errorhandler(500)
 def server_error(e):
