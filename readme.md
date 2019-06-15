@@ -1,3 +1,5 @@
+note: if you want to use relna app you need to check-out the CLI interface on repo [here](https://github.com/solbiatialessandro/relna-client), not on this page. If you want to read about relna project keep on going.
+
 # relna -> Reinforcement Learning Arena
 
 Relna is a platform to train Reinforcement Learning models and share them with other users, it's great for iterating quickily on different models and dataset in the Reinforcement Learning domain.
