@@ -190,7 +190,14 @@ def ship():
     logging.warning("relna:main:ship - inserted new trainer trainerID={}".format(trainerID))
 
     logging.warning("relna:main:ship - ship to gcloud")
-    gcloud_res = gcloud_ship(job_id = trainerID)
+    logging.warning("relna:main:ship - job_id = {}".format(job_id))
+    logging.warning("relna:main:ship - \
+            data will be read from gs://relna-mlengine/data/{}"\
+            .format(expert_policy))
+    gcloud_res = gcloud_ship(
+            job_id = trainerID,
+            data_file_name=expert_policy
+            )
     return "relna:ship SUCCESS |"+gcloud_res
 
 @app.route('/submit_job_results', methods=['POST'])
