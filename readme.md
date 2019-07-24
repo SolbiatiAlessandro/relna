@@ -98,3 +98,9 @@ Client
 - [ ] build interface to upload/download trainers code from server to client
 - [x] build integration to ship trainers from DB
 
+## Iteration II
+
+Google AI Platform (ML Engine)
+- [ ] integrate docker containers when you run tasks https://cloud.google.com/ml-engine/docs/using-containers
+
+
